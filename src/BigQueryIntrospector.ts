@@ -45,8 +45,6 @@ export class BigQueryIntrospector implements DatabaseIntrospector {
 
     const map: Record<string, TableMetadata> = {}
 
-    
-
     await Bluebird.map(datasets, async ({ id }) => {
 
       const from = sql.id(id ?? '', 'INFORMATION_SCHEMA', 'COLUMNS')
@@ -58,12 +56,13 @@ export class BigQueryIntrospector implements DatabaseIntrospector {
         .$castTo<BigQueryInformationSchema>()
         .execute();
 
-
       for (const row of rows) {
         const { table_schema, table_name, column_name, is_nullable, data_type, column_default } = row
+
+        const index = `${table_schema}.${table_name}`
         
-        if (!map[table_name]) {
-          map[table_name] = {
+        if (!map[index]) {
+          map[index] = {
             isView: false,
             name: table_name,
             schema: table_schema,
@@ -71,19 +70,20 @@ export class BigQueryIntrospector implements DatabaseIntrospector {
           }
         }
 
-        map[table_name].columns.push({
+        const col = freeze({
           name: column_name,
           dataType: data_type,
           hasDefaultValue: !!column_default,
           isAutoIncrementing: false,
-          isNullable: is_nullable === 'YES',
+          isNullable: is_nullable === "YES",
         })
+
+        map[index].columns.push(col)
       }
+      
     })
 
     return Object.values(map)
-
-
   }
 
   async getMetadata(

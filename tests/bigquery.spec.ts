@@ -114,3 +114,9 @@ test('simple select', async () => {
 
   
 })
+
+test('introspection', async () => {
+  const tables = await kysely.introspection.getTables()
+
+  expect(tables.filter(t => t.name === 'bank_account_transactions')).toMatchSnapshot()
+})
