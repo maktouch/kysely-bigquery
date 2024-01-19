@@ -73,7 +73,7 @@ export class BigQueryIntrospector implements DatabaseIntrospector {
         const col = freeze({
           name: column_name,
           dataType: data_type,
-          hasDefaultValue: !!column_default,
+          hasDefaultValue: column_default !== 'NULL',
           isAutoIncrementing: false,
           isNullable: is_nullable === "YES",
         })
