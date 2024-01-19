@@ -1,9 +1,13 @@
 {
   "name": "@maktouch/kysely-bigquery",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "BigQuery Dialect for Kysely",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maktouch/kysely-bigquery"
+  },
   "scripts": {
     "prepare": "tsc",
     "test": "vitest",
