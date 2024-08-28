@@ -10,7 +10,9 @@ This project was largely adapted from [kysely-planetscale](https://github.com/de
 
 ## Usage
 
-Pass your BigQuery connection options into the dialect in order to configure the Kysely client. Follow [these docs](https://www.npmjs.com/package/@google-cloud/bigquery) for instructions on how to do so.
+Pass your BigQuery connection options, a BigQuery instance, a Dataset instance, or a Table instance into the dialect in
+order to configure the Kysely client.
+Follow [these docs](https://www.npmjs.com/package/@google-cloud/bigquery) for instructions on how to do so.
 
 ```typescript
 import { Kysely } from 'kysely';
@@ -25,6 +27,11 @@ interface Database {
   some_datasets.some_table: SomeTable
 }
 
-const db = new Kysely<Database>({ dialect: new BigQueryDialect() });
-```
+// Let BigQueryDialect create the BiqQuery instance:
+const options: BigQueryOptions = ...;
+const db = new Kysely<Database>({ dialect: new BigQueryDialect({ options }) });
 
+// Or pass in an existing instance
+const bigquery: BigQuery | Dataset | Table = ...;
+const db = new Kysely<Database>({ dialect: new BigQueryDialect({ bigquery }) });
+```
