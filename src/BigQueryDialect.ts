@@ -8,12 +8,13 @@ import {
   QueryCompiler
 } from 'kysely';
 
-import { BigQueryOptions } from '@google-cloud/bigquery';
+import { BigQueryOptions, BigQuery, Dataset, Table } from '@google-cloud/bigquery';
 import { BigQueryDriver } from './BigQueryDriver';
 import { BigQueryIntrospector } from './BigQueryIntrospector';
 
 export interface BigQueryDialectConfig {
   options?: BigQueryOptions;
+  bigquery?: BigQuery | Dataset | Table;
 }
 
 export class BigQueryDialect implements Dialect {

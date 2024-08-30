@@ -4,15 +4,15 @@ import {
   QueryResult
 } from 'kysely';
 
-import { BigQuery } from '@google-cloud/bigquery';
+import { BigQuery, Dataset, Table } from '@google-cloud/bigquery';
 import { BigQueryDialectConfig } from '.';
 
 
 export class BigQueryConnection implements DatabaseConnection {
-  #client: BigQuery
+  #client: BigQuery | Dataset | Table;
 
   constructor(config: BigQueryDialectConfig) {
-    this.#client = new BigQuery(config.options)
+    this.#client = config.bigquery ?? new BigQuery(config.options)
   }
 
   async executeQuery<O>(compiledQuery: CompiledQuery): Promise<QueryResult<O>> {
@@ -49,7 +49,7 @@ export class BigQueryConnection implements DatabaseConnection {
 
     const options = {
       query: compiledQuery.sql,
-      params: {...compiledQuery.parameters},
+      params: { ...compiledQuery.parameters },
     };
 
     const stream = await this.#client.createQueryStream(options);
